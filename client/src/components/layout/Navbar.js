@@ -1,19 +1,19 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import ud from './UDEL.jpg';
 
 
 class Navbar extends Component {
     render() {
         return (
         <div className="navbar">
-            <nav className="navbar navbar-light bg-light">
-                <div className="nav-wrapper white">
-                    <Link to="/" style={{ fontFamily: "monospace" }} className="col s5 brand-logo center black-text">
-                        <i className="material-icons">code</i>
-                        MERN
-                    </Link>
-                </div>
+            <nav className="navbar navbar-light">
+                <NavLink className="navbar-brand" to="/" >
+                    <img src={ud} width={100} height={100} alt="ud-logo"/>
+                </NavLink>
+                
             </nav>
+
         </div>
         );
     }
