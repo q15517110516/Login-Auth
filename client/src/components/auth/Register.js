@@ -35,7 +35,9 @@ export class Register extends Component {
 
 
     render() {
+
         const { errors } = this.state;
+
         return (
             <div className="container">
                 <div className="back">
@@ -68,7 +70,7 @@ export class Register extends Component {
                                 error={errors.email}/>
                         </div>
                         <div className="form-group">
-                            <label>Passord</label>
+                            <label>Password</label>
                             <input id="password"
                                 type="password" 
                                 className="form-control" 
@@ -78,11 +80,11 @@ export class Register extends Component {
                                 error={errors.password}/>
                         </div>
                         <div className="form-group">
-                            <label>Comfirm Pasword</label>
+                            <label>Confirm Password</label>
                             <input id="password2"
                                 type="password" 
                                 className="form-control" 
-                                placeholder="Comfirm Password"
+                                placeholder="Confirm Password"
                                 onChange={this.onChange} 
                                 value={this.state.password2} 
                                 error={errors.password2}/>
