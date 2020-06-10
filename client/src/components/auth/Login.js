@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+// import { loginUser } from "../../actions/authActions";
+
+const isEmpty = require("is-empty");
 
 export class Login extends Component {
     constructor(){
@@ -7,9 +10,15 @@ export class Login extends Component {
         this.state = {
             email: "",
             password: "",
-            errors: {}
+            errors: {},
+            // initialState: {
+            //     isAuthenticated: false,
+            //     user: {},
+            //     loading: false
+            // }
         };
     }
+
 
     onChange = e => {
         this.setState({ 
@@ -23,7 +32,7 @@ export class Login extends Component {
             email: this.state.email,
             password: this.state.password
         };
-        console.log(userData);
+        
     };
 
     render() {
@@ -39,7 +48,7 @@ export class Login extends Component {
             </div>
             <div className="registerform">
                 <h4>Login</h4>
-                <NavLink to="/login">Don't have an account?</NavLink>
+                <p>Don't have an account?<NavLink to="/login">Register</NavLink></p>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label>Email</label>

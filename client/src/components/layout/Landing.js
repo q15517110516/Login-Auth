@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 class Landing extends Component {
     render() {
         return (
-        <div className="landing">
+        <div className="container">
             <NavLink to="/register" style={{ width: "140px", borderRadius: "3px", letterSpacing: "1.5px" }}>
                 <button type="button" className="btn btn-primary">Register</button>
                 

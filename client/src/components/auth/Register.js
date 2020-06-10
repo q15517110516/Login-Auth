@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
+import connect from 'react-redux/lib/connect/connect';
+import mapStateToProps from 'react-redux/lib/connect/mapStateToProps';
+import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import { registerUser } from '../../actions/authActions';
 
 export class Register extends Component {
     constructor(){
@@ -12,6 +17,13 @@ export class Register extends Component {
             errors: {}
         };
     }
+
+    // registerUser = (userData, history) => {
+    //     axios.post("/api/users/register", userData)
+    //         .then(res => history.push("/login"))
+    //         .catch(err => console.log(err));
+    // };
+
 
     onChange = e => {
         this.setState({
@@ -29,7 +41,7 @@ export class Register extends Component {
             password2: this.state.password2
         }
 
-        console.log(newUser)
+        // this.props.registerUser(newUser, this.props.history); 
     };
 
 
@@ -47,7 +59,7 @@ export class Register extends Component {
                 </div>
                 <div className="registerform">
                     <h4>Register</h4>
-                    <NavLink to="/login">Alreay have an account?</NavLink>
+                    <p>Alreay have an account?<NavLink to="/login">Login</NavLink></p>
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
                             <label>Name</label>
@@ -98,4 +110,7 @@ export class Register extends Component {
     }
 }
 
-export default Register
+export default connect(
+    mapStateToProps,
+    { registerUser }
+)(withRouter(Register));
