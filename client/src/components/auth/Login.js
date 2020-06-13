@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
-// import { loginUser } from "../../actions/authActions";
-
-const isEmpty = require("is-empty");
+import { connect } from "react-redux";
+import { loginUser } from "../../actions/authActions";
 
 export class Login extends Component {
     constructor(){
@@ -11,14 +10,29 @@ export class Login extends Component {
             email: "",
             password: "",
             errors: {},
-            // initialState: {
-            //     isAuthenticated: false,
-            //     user: {},
-            //     loading: false
-            // }
         };
     }
 
+    componentDidMount() {
+        // If logged in and user navigates to Login page, should redirect them to dashboard
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push("/dashboard");
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.auth.isAuthenticated) {
+          this.props.history.push("/dashboard"); // push user to dashboard when they login
+        }
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        }
+    }
+
+    
+    
 
     onChange = e => {
         this.setState({ 
@@ -32,7 +46,7 @@ export class Login extends Component {
             email: this.state.email,
             password: this.state.password
         };
-        
+        this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
     };
 
     render() {
@@ -48,10 +62,14 @@ export class Login extends Component {
             </div>
             <div className="registerform">
                 <h4>Login</h4>
-                <p>Don't have an account?<NavLink to="/login">Register</NavLink></p>
+                <p>Don't have an account?<NavLink to="/register">Register</NavLink></p>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
                         <label>Email</label>
+                        <span className="red-text">
+                            {errors.email}
+                            {errors.emailnotfound}
+                        </span>
                         <input id="email"
                             type="email" 
                             className="form-control" 
@@ -62,6 +80,10 @@ export class Login extends Component {
                     </div>
                     <div className="form-group">
                         <label>Password</label>
+                        <span className="red-text">
+                            {errors.password}
+                            {errors.passwordincorrect}
+                        </span>
                         <input id="password"
                             type="password" 
                             className="form-control" 
@@ -79,4 +101,12 @@ export class Login extends Component {
     }
 }
 
-export default Login
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+export default connect(
+    mapStateToProps,
+    { loginUser }
+)(Login);

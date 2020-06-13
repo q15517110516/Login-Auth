@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
-import axios from 'axios';
-import connect from 'react-redux/lib/connect/connect';
-import mapStateToProps from 'react-redux/lib/connect/mapStateToProps';
-import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
+import { NavLink, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
+
+
 
 export class Register extends Component {
     constructor(){
@@ -18,11 +17,21 @@ export class Register extends Component {
         };
     }
 
-    // registerUser = (userData, history) => {
-    //     axios.post("/api/users/register", userData)
-    //         .then(res => history.push("/login"))
-    //         .catch(err => console.log(err));
-    // };
+    componentDidMount() {
+        // If logged in and user navigates to Register page, should redirect them to dashboard
+        if (this.props.auth.isAuthenticated) {
+            this.props.history.push("/dashboard");
+        }
+    }
+
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.errors) {
+            this.setState({
+                errors: nextProps.errors
+            });
+        }
+    };
 
 
     onChange = e => {
@@ -33,7 +42,7 @@ export class Register extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        
+
         const newUser = {
             name: this.state.name,
             email: this.state.email,
@@ -41,7 +50,7 @@ export class Register extends Component {
             password2: this.state.password2
         }
 
-        // this.props.registerUser(newUser, this.props.history); 
+        this.props.registerUser(newUser, this.props.history); 
     };
 
 
@@ -63,13 +72,16 @@ export class Register extends Component {
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
                             <label>Name</label>
+                            <span className="red-text">{errors.name}</span>
                             <input id="name"
                                 type="text" 
                                 className="form-control" 
                                 placeholder="Name" 
                                 onChange={this.onChange} 
                                 value={this.state.name} 
-                                error={errors.name}/>
+                                error={errors.name}
+                                />
+                                
                         </div>
                         <div className="form-group">
                             <label>Email</label>
@@ -79,27 +91,32 @@ export class Register extends Component {
                                 placeholder="Email"
                                 onChange={this.onChange} 
                                 value={this.state.email} 
-                                error={errors.email}/>
+                                error={errors.email}
+                                />
                         </div>
                         <div className="form-group">
                             <label>Password</label>
+                            <span className="red-text">{errors.password}</span>
                             <input id="password"
                                 type="password" 
                                 className="form-control" 
                                 placeholder="Password"
                                 onChange={this.onChange} 
                                 value={this.state.password} 
-                                error={errors.password}/>
+                                error={errors.password}
+                                />
                         </div>
                         <div className="form-group">
                             <label>Confirm Password</label>
+                            <span className="red-text">{errors.password2}</span>
                             <input id="password2"
                                 type="password" 
                                 className="form-control" 
                                 placeholder="Confirm Password"
                                 onChange={this.onChange} 
                                 value={this.state.password2} 
-                                error={errors.password2}/>
+                                error={errors.password2}
+                                />
                         </div>
                         <button type="submit" className="btn btn-primary">Register</button>
                     </form>
@@ -109,6 +126,11 @@ export class Register extends Component {
         )
     }
 }
+
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
 
 export default connect(
     mapStateToProps,

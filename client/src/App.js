@@ -2,22 +2,53 @@ import React, { Component } from 'react';
 import './App.css';
 import Navbar from './components/layout/Navbar'
 import Landing from './components/layout/Landing';
-import { Route } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import Register from './components/auth/Register';
 import Login from './components/auth/Login';
 
+import store from './store';
+import { Provider } from 'react-redux';
 
-export class App extends Component {
-  render() {
-    return (
-      <div className="main-page">
-        <Navbar/>
-        <Route exact path="/" component={Landing}/>
-        <Route exact path="/register" component={Register}/>
-        <Route exact path="/login" component={Login}/>
-      </div>
-    )
+import jwt_decode from "jwt-decode";
+import setAuthToken from "./utils/setAuthToken";
+import { setCurrentUser, logoutUser } from "./actions/authActions";
+import PrivateRoute from "./components/private-route/PrivateRoute";
+import Dashboard from "./components/dashboard";
+
+// Check for token to keep user logged in
+if (localStorage.jwtToken) {
+  // Set auth token header auth
+  const token = localStorage.jwtToken;
+  setAuthToken(token);
+  // Decode token and get user info and exp
+  const decoded = jwt_decode(token);
+  // Set user and isAuthenticated
+  store.dispatch(setCurrentUser(decoded));
+// Check for expired token
+  const currentTime = Date.now() / 1000; // to get in milliseconds
+  if (decoded.exp < currentTime) {
+    // Logout user
+    store.dispatch(logoutUser());
+    // Redirect to login
+    window.location.href = "./login";
   }
+}
+export class App extends Component {
+    render() {
+        return (
+          <Provider store={store}>
+            <div className="main-page">
+                <Navbar/>
+                <Route exact path="/" component={Landing}/>
+                <Route exact path="/register" component={Register}/>
+                <Route exact path="/login" component={Login}/>
+                <Switch>
+                  <PrivateRoute exact path="/dashboard" component={Dashboard} />
+                </Switch>
+            </div>
+          </Provider>
+        )
+    }
 }
 
 export default App
