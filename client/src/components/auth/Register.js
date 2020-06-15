@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { registerUser } from '../../actions/authActions';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import './Style.css';
+
 
 
 
@@ -63,12 +66,12 @@ export class Register extends Component {
             <div className="container">
                 <div className="back">
                     <NavLink to="/" >
-                        <i className="material-icons">keyboard_backspace</i>Back to Home
+                        <i><KeyboardBackspaceIcon/></i>Back to Home
                     </NavLink>
                 </div>
                 <div className="registerform">
-                    <h4>Register</h4>
-                    <p>Alreay have an account?<NavLink to="/login">Login</NavLink></p>
+                    <h3>Register</h3>
+                    <p style={{fontSize: "20px"}}>Alreay have an account?<NavLink to="/login" style={{marginLeft: "10px"}}>Login</NavLink></p>
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
                             <label>Name</label>
@@ -85,6 +88,7 @@ export class Register extends Component {
                         </div>
                         <div className="form-group">
                             <label>Email</label>
+                            <span className="red-text">{errors.email}</span>
                             <input id="email"
                                 type="email" 
                                 className="form-control" 
